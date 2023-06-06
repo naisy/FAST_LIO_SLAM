@@ -33,12 +33,12 @@
     <param name="save_directory" type="string" value="$(env HOME)/Desktop/catkin_fastlio_slam/data/"/>  <!-- CHANGE THIS and end with / -->
 
     <!-- nodes -->
-    <node pkg="aloam_velodyne" type="alaserPGO" name="alaserPGO" output="screen" /> <!-- Scan Context-based PGO -->
+    <node pkg="fast_lio_slam" type="alaserPGO" name="alaserPGO" output="screen" /> <!-- Scan Context-based PGO -->
 
     <!-- visulaization -->
     <arg name="rvizscpgo" default="true" />
     <group if="$(arg rvizscpgo)">
-        <node launch-prefix="nice" pkg="rviz" type="rviz" name="rvizscpgo" args="-d $(find aloam_velodyne)/rviz_cfg/aloam_velodyne.rviz" />
+        <node launch-prefix="nice" pkg="rviz" type="rviz" name="rvizscpgo" args="-d $(find fast_lio_slam)/rviz_cfg/aloam_velodyne.rviz" />
     </group>
 
 </launch>

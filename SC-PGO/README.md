@@ -31,7 +31,7 @@
     cd ../
     catkin_make
     source ~/catkin_scaloam_ws/devel/setup.bash
-    roslaunch aloam_velodyne aloam_mulran.launch # for MulRan dataset setting 
+    roslaunch fast_lio_slam aloam_mulran.launch # for MulRan dataset setting 
 ```
 
 ## Example Results 
@@ -49,7 +49,7 @@
 ### KITTI 05 
 - For KITTI (HDL-64 sensor), run using the command 
     ```
-    roslaunch aloam_velodyne aloam_velodyne_HDL_64.launch # for KITTI dataset setting
+    roslaunch fast_lio_slam aloam_velodyne_HDL_64.launch # for KITTI dataset setting
     ```
 - To publish KITTI scans, you can use mini-kitti publisher, a simple python script: https://github.com/gisbi-kim/mini-kitti-publisher
 - example video (no GPS used here): https://youtu.be/hk3Xx8SKkv4
