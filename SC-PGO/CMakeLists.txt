@@ -29,8 +29,8 @@ find_package(GTSAM REQUIRED QUIET)
 
 include_directories(
   include
-	${catkin_INCLUDE_DIRS} 
-	${PCL_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS} 
+  ${PCL_INCLUDE_DIRS}
   ${CERES_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
   ${GTSAM_INCLUDE_DIR}
@@ -41,16 +41,6 @@ catkin_package(
   DEPENDS EIGEN3 PCL 
   INCLUDE_DIRS include
 )
-
-
-add_executable(ascanRegistration src/scanRegistration.cpp)
-target_link_libraries(ascanRegistration ${catkin_LIBRARIES} ${PCL_LIBRARIES})
-
-add_executable(alaserOdometry src/laserOdometry.cpp)
-target_link_libraries(alaserOdometry ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${CERES_LIBRARIES})
-
-add_executable(alaserMapping src/laserMapping.cpp)
-target_link_libraries(alaserMapping ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${CERES_LIBRARIES})
 
 add_executable(alaserPGO 
   src/laserPosegraphOptimization.cpp
@@ -64,10 +54,3 @@ target_link_libraries(alaserPGO
   ${OpenMP_CXX_FLAGS}
   gtsam
 )
-
-add_executable(kittiHelper src/kittiHelper.cpp)
-target_link_libraries(kittiHelper ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${OpenCV_LIBS})
-
-
-
-
