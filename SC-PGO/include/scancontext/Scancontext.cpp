@@ -298,7 +298,7 @@ std::pair<int, float> SCManager::detectLoopClosureIDBetweenSession (std::vector<
 
     nanoflann::KNNResultSet<float> knnsearch_result( NUM_CANDIDATES_FROM_TREE );
     knnsearch_result.init( &candidate_indexes[0], &out_dists_sqr[0] );
-    polarcontext_tree_batch_->index->findNeighbors( knnsearch_result, &curr_key[0] /* query */, nanoflann::SearchParams(10) ); // error here
+    polarcontext_tree_batch_->index->findNeighbors( knnsearch_result, &curr_key[0] /* query */, nanoflann::SearchParameters(10) ); // error here
 
     // step 2: pairwise distance (find optimal columnwise best-fit using cosine distance)
     TicTocV2 t_calc_dist;   
@@ -375,7 +375,7 @@ std::pair<int, float> SCManager::detectLoopClosureID ( void )
     TicTocV2 t_tree_search;
     nanoflann::KNNResultSet<float> knnsearch_result( NUM_CANDIDATES_FROM_TREE );
     knnsearch_result.init( &candidate_indexes[0], &out_dists_sqr[0] );
-    polarcontext_tree_->index->findNeighbors( knnsearch_result, &curr_key[0] /* query */, nanoflann::SearchParams(10) ); 
+    polarcontext_tree_->index->findNeighbors( knnsearch_result, &curr_key[0] /* query */, nanoflann::SearchParameters(10) ); 
     t_tree_search.toc("Tree search");
 
     /* 
