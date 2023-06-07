@@ -56,6 +56,7 @@
 #include "aloam_velodyne/tic_toc.h"
 
 #include "scancontext/Scancontext.h"
+#include "LoopClosureScoresMap.hpp"
 
 using namespace gtsam;
 
@@ -79,6 +80,8 @@ std::queue<std::pair<int, int> > scLoopICPBuf;
 
 std::mutex mBuf;
 std::mutex mKF;
+
+std::unordered_map<LCKey, float, LCKeyHash, LCKeyEqual> loopClosureScoresMap;
 
 double timeLaserOdometry = 0.0;
 double timeLaser = 0.0;
@@ -423,7 +426,6 @@ void loopFindNearKeyframesCloud( pcl::PointCloud<PointType>::Ptr& nearKeyframes,
     *nearKeyframes = *cloud_temp;
 } // loopFindNearKeyframesCloud
 
-
 std::optional<gtsam::Pose3> doICPVirtualRelative( int _loop_kf_idx, int _curr_kf_idx )
 {
     // parse pointclouds
@@ -457,12 +459,23 @@ std::optional<gtsam::Pose3> doICPVirtualRelative( int _loop_kf_idx, int _curr_kf
     icp.setInputTarget(targetKeyframeCloud);
     pcl::PointCloud<PointType>::Ptr unused_result(new pcl::PointCloud<PointType>());
     icp.align(*unused_result);
- 
+
+    // Check the existence of the key using the find() method
+    LCKey lckey{_loop_kf_idx, _curr_kf_idx};
+    auto it = loopClosureScoresMap.find(lckey);
     float loopFitnessScoreThreshold = 0.3; // user parameter but fixed low value is safe. 
+    if (it != loopClosureScoresMap.end()) {
+        // If the key exists, retrieve the value
+        loopFitnessScoreThreshold = it->second;
+    } else {
+        // Handling for the case when the key does not exist
+        loopClosureScoresMap[lckey] = loopFitnessScoreThreshold;
+    }
     if (icp.hasConverged() == false || icp.getFitnessScore() > loopFitnessScoreThreshold) {
         std::cout << "[SC loop] ICP fitness test failed (" << icp.getFitnessScore() << " > " << loopFitnessScoreThreshold << "). Reject this SC loop." << std::endl;
         return std::nullopt;
     } else {
+        loopClosureScoresMap[lckey] = icp.getFitnessScore(); // update best score
         std::cout << "[SC loop] ICP fitness test passed (" << icp.getFitnessScore() << " < " << loopFitnessScoreThreshold << "). Add this SC loop." << std::endl;
     }
 
