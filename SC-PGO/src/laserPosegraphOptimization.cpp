@@ -452,7 +452,7 @@ std::optional<gtsam::Pose3> doICPVirtualRelative( int _loop_kf_idx, int _curr_kf
     icp.setMaximumIterations(100);
     icp.setTransformationEpsilon(1e-6);
     icp.setEuclideanFitnessEpsilon(1e-6);
-    icp.setRANSACIterations(0);
+    icp.setRANSACIterations(10);
 
     // Align pointclouds
     icp.setInputSource(cureKeyframeCloud);
@@ -668,7 +668,7 @@ void performSCLoopClosure(void)
 
 void process_lcd(void)
 {
-    float loopClosureFrequency = 1.0; // can change 
+    float loopClosureFrequency = 0.5; // can change 
     ros::Rate rate(loopClosureFrequency);
     while (ros::ok())
     {
@@ -743,7 +743,7 @@ void process_isam(void)
 
 void pubMap(void)
 {
-    int SKIP_FRAMES = 2; // sparse map visulalization to save computations 
+    int SKIP_FRAMES = 1; // sparse map visulalization to save computations 
     int counter = 0;
 
     laserCloudMapPGO->clear();
