@@ -1,4 +1,6 @@
 <launch>
+    <!-- Gets current time at launch execution as a formatted string -->
+    <arg name="start_time" default="$(eval eval ('_' + '_import_' + '_(\'datetime\')').datetime.now().strftime('%Y-%m-%d-%H-%M-%S'))"/>
 
     <param name="scan_line" type="int" value="64" />
 
@@ -30,7 +32,7 @@
     <remap from="/cloud_for_scancontext" to="/cloud_registered_lidar"/>   <!-- because ScanContext requires lidar-ego-centric coordinate for the better performance -->
 
     <!-- utils -->
-    <param name="save_directory" type="string" value="$(env HOME)/Desktop/catkin_fastlio_slam/data/"/>  <!-- CHANGE THIS and end with / -->
+    <param name="save_directory" type="string" value="$(env HOME)/slam_map_$(arg date)"/>  <!-- CHANGE THIS and end with / -->
 
     <!-- nodes -->
     <node pkg="fast_lio_slam" type="alaserPGO" name="alaserPGO" output="screen" /> <!-- Scan Context-based PGO -->
