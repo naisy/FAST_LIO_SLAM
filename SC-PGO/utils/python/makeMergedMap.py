@@ -4,7 +4,7 @@ import time
 import copy 
 from io import StringIO
 
-import pypcd # for the install, use this command: python3.x (use your python ver) -m pip install --user git+https://github.com/DanielPollithy/pypcd.git
+# for the install, pip install git+https://github.com/DanielPollithy/pypcd.git
 from pypcd import pypcd
 
 import numpy as np
@@ -24,9 +24,16 @@ color_table_len = color_table.shape[0]
 ##########################
 # User only consider this block
 ##########################
+# Require data_dir path
+if len(sys.argv) < 2:
+    print("Need data_dir path")
+    sys.exit(1)
 
-data_dir = "/home/user/Documents/catkin2021/catkin_fastlio2/data/" # should end with / 
-scan_idx_range_to_stack = [0, 200] # if you want a whole map, use [0, len(scan_files)]
+data_dir = sys.argv[1]
+if not data_dir.endswith('/'):
+    data_dir += '/'
+
+scan_idx_range_to_stack = [0, 6000] # if you want a whole map, use [0, len(scan_files)]
 node_skip = 1
 
 num_points_in_a_scan = 150000 # for reservation (save faster) // e.g., use 150000 for 128 ray lidars, 100000 for 64 ray lidars, 30000 for 16 ray lidars, if error occured, use the larger value.
@@ -85,7 +92,7 @@ for node_idx in range(len(scan_files)):
         continue
 
     nodes_count = nodes_count + 1
-    if( nodes_count % node_skip is not 0): 
+    if( nodes_count % node_skip != 0): 
         if(node_idx is not scan_idx_range_to_stack[0]): # to ensure the vis init 
             continue
 
